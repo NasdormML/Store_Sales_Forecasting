@@ -1,7 +1,9 @@
 # Store Sales - Time Series Forecasting
 
+![Python](https://img.shields.io/badge/Python-3.11+-brightgreen)
+![Seaborn](https://img.shields.io/badge/Seaborn-v0.13.2-blue)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-v1.5.1-yellow)
 ![LightGBM](https://img.shields.io/badge/LightGBM-v3.3.2-blue)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 # Store Sales - Time Series Forecasting
 
