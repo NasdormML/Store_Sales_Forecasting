@@ -9,7 +9,7 @@ This project aims to predict future store sales using time series forecasting te
 
 ## Project Structure
 
-- `data/`: Folder containing the dataset.
+- `store-sales-time-series-forecasting/`: Folder containing the dataset.
 - `notebooks/`: Jupyter notebooks for exploratory data analysis and model training.
   - `Visual.ipynb`: Exploratory Data Analysis notebook.
   - `Fmodel.ipynb`: Notebook for model training and evaluation.
