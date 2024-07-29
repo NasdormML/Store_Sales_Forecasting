@@ -7,14 +7,14 @@
 
 # Store Sales - Time Series Forecasting
 
-This project aims to predict future store sales using time series forecasting techniques. The model is trained using LightGBM.
+This project aims to predict future store sales using time series forecasting techniques.
 
 ## Project Structure
 
 - `store-sales-time-series-forecasting/`: Folder containing the dataset.
 - `notebooks/`: Jupyter notebooks for exploratory data analysis and model training.
   - `Visual.ipynb`: Exploratory Data Analysis notebook.
-  - `Fmodel.ipynb`: Notebook for model training and evaluation.
+  - `Fmodel.ipynb`: Notebook for model training and evaluation, but empty for now(WIP).
 - `README.md`: Project overview and instructions.
 
 ## Getting Started
