@@ -8,8 +8,6 @@
 ## Store Sales - Time Series Forecasting
 
 This project aims to predict future store sales using time series forecasting techniques.
-
-# Data
 The dataset consists of sales data for multiple stores over a period of time. Key features include:
 
 Store ID: Identification of different stores.
