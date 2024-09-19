@@ -25,7 +25,7 @@ The dataset consists of sales data for multiple stores over a period of time. Ke
 
 The primary model used in this project is XGBoost, chosen for its high performance and CUDA support. The model was trained with the following default hyperparameters.
 
-# Evaluation
+Evaluation
 
 The model was evaluated using the following metrics:
 - Root Mean Squared Error (RMSE)
@@ -35,7 +35,7 @@ Results:
 
 ## Getting Started
 
-# Prerequisites
+Prerequisites
 
 Make sure you have the following libraries installed:
 - pandas
@@ -57,7 +57,7 @@ git clone https://github.com/NasdormML/Time_Series.git
 cd Time_Series
 ```
 
-# Install the required packages:
+Install the required packages:
 ```bash
 pip install -r requirements.txt
 ```
