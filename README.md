@@ -5,7 +5,7 @@
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-v1.5.1-yellow)
 ![XGBoost](https://img.shields.io/badge/XGBoost-v2.1.0-red)
 
-# Store Sales - Time Series Forecasting
+## Store Sales - Time Series Forecasting
 
 This project aims to predict future store sales using time series forecasting techniques.
 
