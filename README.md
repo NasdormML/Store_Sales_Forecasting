@@ -9,6 +9,14 @@
 
 This project aims to predict future store sales using time series forecasting techniques.
 
+# Data
+The dataset consists of sales data for multiple stores over a period of time. Key features include:
+
+Store ID: Identification of different stores.
+Date: The time component of the series.
+Sales: The target variable we are predicting.
+More detailed EDA and preprocessing steps are included in the notebook.
+
 # Project Structure
 
 - `store-sales-time-series-forecasting/`: Folder containing the dataset.
