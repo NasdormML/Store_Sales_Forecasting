@@ -87,7 +87,7 @@ The project involves several steps of data preprocessing and feature extraction 
 The main model used in this project is **XGBoost**, selected for its robustness and support for CUDA, enabling GPU acceleration. The pipeline includes preprocessing steps and the model training process.
 
 - **TimeSeriesSplit**: Used to split the data into sequential training and testing sets, preserving the temporal order.
-- **XGBoost Model**: The model was trained with default hyperparameters initially and further optimized through `RandomizedSearchCV`.
+- **XGBoost Model**: The model was trained with default hyperparameters initially and further optimized through `optuna`.
 
 ```python
 pipeline = Pipeline(steps=[
@@ -101,16 +101,8 @@ pipeline = Pipeline(steps=[
 ### Model Evaluation:
 - **Metric:** Root Mean Squared Error (RMSE)
 - **Results:**
-  
-  Fold 1 RMSE: 404.60
-  
-  Fold 2 RMSE: 418.76
-  
-  Fold 3 RMSE: 600.18
-  
-  Fold 4 RMSE: 478.32
-  
-  Fold 5 RMSE: 373.90
+  Without optimized: 454.6
+  With optuna: 413.9
 
 ---
 
@@ -123,12 +115,13 @@ Ensure that the following libraries are installed:
 - `numpy`
 - `scikit-learn`
 - `xgboost`
+- `optuna`
 - `matplotlib`
 - `seaborn`
 
 You can install them with the following command:
 ```bash
-pip install pandas numpy scikit-learn xgboost matplotlib seaborn
+pip install pandas numpy scikit-learn xgboost matplotlib seaborn optuna
 ```
 
 ---
