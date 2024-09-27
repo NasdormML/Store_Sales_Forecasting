@@ -4,6 +4,7 @@
 ![Seaborn](https://img.shields.io/badge/Seaborn-v0.13.2-blue)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-v1.5.1-yellow)
 ![XGBoost](https://img.shields.io/badge/XGBoost-v2.1.0-red)
+![Optuna](https://img.shields.io/badge/Optuna-v3.0.0-orange)
 
 This project aims to predict future store sales using time series forecasting techniques. The dataset consists of sales data from multiple stores over a period of time, allowing for advanced forecasting and trend analysis.
 
@@ -98,12 +99,55 @@ pipeline = Pipeline(steps=[
 ])
 ```
 
-### Model Evaluation:
-- **Metric:** Root Mean Squared Error (RMSE)
-- **Results:**
-  Without optimized: 454.6
+---
 
-  With optuna: 413.9
+## Hyperparameter Optimization with Optuna
+
+We integrated **Optuna** for automatic hyperparameter tuning to further improve the model's performance. 
+
+### Key Hyperparameters Optimized:
+- `n_estimators`: Number of trees.
+- `max_depth`: Maximum depth of the trees.
+- `learning_rate`: Step size for each boosting iteration.
+- `subsample`: Fraction of samples used to train each tree.
+- `colsample_bytree`: Fraction of features used to train each tree.
+- `min_child_weight`: Minimum sum of instance weights for child nodes.
+- `reg_alpha`: L1 regularization term.
+- `reg_lambda`: L2 regularization term.
+
+The best hyperparameters found by Optuna after 20 trials were:
+
+```bash
+Best RMSE: 413.95
+
+Best hyperparameters:
+{
+    'n_estimators': 992,
+    'max_depth': 12,
+    'learning_rate': 0.0083,
+    'subsample': 0.7746,
+    'colsample_bytree': 0.8047,
+    'min_child_weight': 6,
+    'reg_alpha': 3.62,
+    'reg_lambda': 4.25
+}
+```
+
+### Visualization of the Optimization Process
+
+Optuna provides useful visualizations to track the optimization process:
+
+#### 1. Optimization History
+This plot shows how the RMSE changed during the optimization process:
+```python
+vis.plot_optimization_history(study)
+```
+
+#### 2. Hyperparameter Importance
+This plot shows which hyperparameters had the most influence on the model's performance:
+```python
+vis.plot_param_importances(study)
+```
 
 ---
 
