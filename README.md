@@ -102,6 +102,7 @@ pipeline = Pipeline(steps=[
 - **Metric:** Root Mean Squared Error (RMSE)
 - **Results:**
   Without optimized: 454.6
+
   With optuna: 413.9
 
 ---
