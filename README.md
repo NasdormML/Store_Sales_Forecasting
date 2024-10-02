@@ -1,4 +1,4 @@
-## Store Sales - Time Series Forecasting
+# Store Sales - Time Series Forecasting
 
 ![Python](https://img.shields.io/badge/Python-3.11+-brightgreen)
 ![Seaborn](https://img.shields.io/badge/Seaborn-v0.13.2-blue)
@@ -6,119 +6,127 @@
 ![XGBoost](https://img.shields.io/badge/XGBoost-v2.1.0-red)
 ![Optuna](https://img.shields.io/badge/Optuna-v3.0.0-orange)
 
-This project aims to predict future store sales using time series forecasting techniques. The dataset consists of sales data from multiple stores over a period of time, allowing for advanced forecasting and trend analysis.
+## Overview
 
-### Key Features:
-- **Store ID:** Identification for each store.
-- **Date:** The time component, critical for time series forecasting.
-- **Sales:** The target variable representing the store’s sales, which we aim to predict.
+This project uses **time series forecasting** techniques to predict future sales for various stores. It leverages advanced machine learning models and optimizes them using **Optuna** to achieve the best possible predictions. Key features include data preprocessing, feature engineering, and model optimization.
+
+## Table of Contents
+
+- [Project Structure](#project-structure)
+- [Data Preparation and Feature Engineering](#data-preparation-and-feature-engineering)
+- [Modeling](#modeling)
+- [Hyperparameter Optimization](#hyperparameter-optimization-with-optuna)
+- [Getting Started](#getting-started)
+- [Installation](#installation)
+- [License](#license)
+
+## Key Features
+
+- **Store ID**: Unique identification for each store.
+- **Date**: The time component used for forecasting.
+- **Sales**: The target variable representing store sales, which we aim to predict.
   
-More detailed exploratory data analysis (EDA) and preprocessing steps are included in the notebook.
+Comprehensive **exploratory data analysis (EDA)** and preprocessing steps are included in the notebook.
 
 ---
 
 ## Project Structure
 
-- `store-sales-time-series-forecasting/`: Contains the dataset and additional files.
-- `Fmodel.ipynb`: Main notebook with EDA, preprocessing, and the first run of the XGBoost model (without hyperparameter tuning).
-- `README.md`: Project overview, setup instructions, and details.
+```bash
+├── store-sales-time-series-forecasting/    # Datasets used in the project
+├── notebooks/Fmodel.ipynb                  # Jupyter notebooks with EDA and modeling
+├── README.md                               # Project overview and setup
+└── requirements.txt                        # Dependencies and libraries
+```
 
 ---
 
 ## Data Preparation and Feature Engineering
 
-The project involves several steps of data preprocessing and feature extraction to prepare the data for modeling:
-
-1. **Data Loading**: The following datasets are loaded:
-   - `holidays_events.csv` (holiday information)
-   - `oil.csv` (oil price data)
-   - `stores.csv` (store information)
-   - `transactions.csv` (store transaction counts)
-   - `train.csv` and `test.csv` (training and testing sales data)
+1. **Data Loading**: Loading of multiple datasets, including:
+    - `holidays_events.csv`
+    - `oil.csv`
+    - `stores.csv`
+    - `transactions.csv`
+    - `train.csv` and `test.csv`
 
    ```python
-   df_holidays = pd.read_csv(comp_dir / "holidays_events.csv", ...)
-   df_oil = pd.read_csv(comp_dir / "oil.csv", parse_dates=['date'])
+   df_holidays = pd.read_csv(comp_dir / "holidays_events.csv",parse_dates=['date'])
+   df_oil = pd.read_csv(comp_dir /'oil.csv', parse_dates=['date'])
+   df_stores = pd.read_csv(comp_dir / 'stores.csv')
+   df_trans = pd.read_csv(comp_dir / 'transactions.csv', parse_dates=['date'])
    df_train = pd.read_csv(comp_dir / 'train.csv', parse_dates=['date'])
+   df_test = pd.read_csv(comp_dir / 'test.csv', parse_dates=['date'])
    ```
 
 2. **Exploratory Data Analysis (EDA)**:
-   - **Oil Prices**: The impact of oil price fluctuations on sales was visualized using line plots.
-   - **Sales Trends**: Monthly and weekly sales trends were analyzed, including:
-     - Bar plots of average sales per month.
-     - Weekly sales distribution with `day_of_week` features.
-   - **Boxplots**: Sales distributions by month were visualized using box plots to detect potential outliers or seasonal patterns.
+   - Analyzing the impact of oil prices and sales trends using **line plots** and **box plots**.
+   - Monthly sales analysis and identifying trends using `seaborn`.
 
    ```python
    sns.lineplot(data=df_oil, x='date', y='dcoilwtico')
    plt.title('Oil Prices Over Time')
    plt.show()
-
-   train['month'] = train['date'].dt.month
-   monthly_sales = train.groupby('month')['sales'].mean()
-   monthly_sales.plot(kind='bar', color='orange')
-   plt.title('Average Sales Per Month')
-   plt.show()
    ```
 
 3. **Feature Engineering**:
-   - Extracted key temporal features such as `year`, `month`, `day_of_week`, `week_of_year`, and a binary indicator `is_weekend`.
-   - Created lag features (`lag_7_sales`) and rolling averages (`rolling_mean_7`) to capture temporal dependencies.
+   - Extracting key time-based features (`year`, `month`, `day_of_week`, `week_of_year`).
+   - Creating lag and rolling average features to capture temporal dependencies.
 
    ```python
    train['lag_7_sales'] = train['sales'].shift(7)
+   train['lag_14_sales'] = train['sales'].shift(14)
    train['rolling_mean_7'] = train['sales'].shift(1).rolling(window=7).mean()
+   train['rolling_mean_14'] = train['sales'].shift(1).rolling(window=14).mean()
+
+   train['log_sales'] = np.log1p(train['sales'])
    ```
 
-4. **Categorical and Numerical Feature Processing**:
-   - Applied one-hot encoding to categorical features (e.g., holiday types, store information).
-   - Imputed missing values and scaled numerical features using StandardScaler.
+4. **Data Processing**: One-hot encoding, missing value imputation, and feature scaling using **scikit-learn** pipelines.
 
    ```python
-   categorical_transformer = Pipeline(steps=[
-       ('imputer', SimpleImputer(strategy='constant', fill_value='unknown')),
-       ('encoder', OneHotEncoder(handle_unknown='ignore'))
+   target_encoder = ce.TargetEncoder(cols=categorical_features)
+
+   numerical_transformer = Pipeline(steps=[
+    ('imputer', SimpleImputer(strategy='mean')),
+    ('scaler', StandardScaler())
    ])
+   preprocessor = ColumnTransformer(
+       transformers=[
+           ('num', numerical_transformer, numerical_features),
+           ('cat', 'passthrough', categorical_features)
+            ]
+        )
+   
    ```
 
 ---
 
 ## Modeling
 
-The main model used in this project is **XGBoost**, selected for its robustness and support for CUDA, enabling GPU acceleration. The pipeline includes preprocessing steps and the model training process.
-
-- **TimeSeriesSplit**: Used to split the data into sequential training and testing sets, preserving the temporal order.
-- **XGBoost Model**: The model was trained with default hyperparameters initially and further optimized through `optuna`.
+The primary model is **XGBoost**, chosen for its efficiency and support for GPU acceleration. The model is trained using **TimeSeriesSplit** for temporal cross-validation, followed by hyperparameter tuning with Optuna.
 
 ```python
-pipeline = Pipeline(steps=[
-    ('preprocessor', preprocessor),
-    ('model', XGBRegressor(n_estimators=500, colsample_bytree=0.5, subsample=0.7, 
-                           min_child_weight=3, learning_rate=0.05, max_depth=6, reg_lambda=0.5, reg_alpha=0.5,
-                           device = "cuda", tree_method='hist', objective='reg:squarederror', random_state=42,))
-])
+        model = xgb.train(
+            param, 
+            dtrain,
+            num_boost_round=trial.suggest_int('n_estimators', 100, 1000),
+            evals=[(dtest, 'validation')],
+            early_stopping_rounds=15,
+            verbose_eval=False,
+        )
 ```
 
 ---
 
 ## Hyperparameter Optimization with Optuna
 
-We integrated **Optuna** for automatic hyperparameter tuning to further improve the model's performance. 
+**Optuna** is used to automatically optimize the model's hyperparameters, improving performance and reducing error metrics like RLMSE.
 
-### Key Hyperparameters Optimized:
-- `n_estimators`: Number of trees.
-- `max_depth`: Maximum depth of the trees.
-- `learning_rate`: Step size for each boosting iteration.
-- `subsample`: Fraction of samples used to train each tree.
-- `colsample_bytree`: Fraction of features used to train each tree.
-- `min_child_weight`: Minimum sum of instance weights for child nodes.
-- `reg_alpha`: L1 regularization term.
-- `reg_lambda`: L2 regularization term.
-
-The best hyperparameters found by Optuna after 20 trials were:
+### Example of optimized hyperparameters:
 
 ```bash
-Best RMSE: 413.95
+Best RLMSE: 0.75094
 
 Best hyperparameters:
 {
@@ -133,19 +141,14 @@ Best hyperparameters:
 }
 ```
 
-### Visualization of the Optimization Process
+#### Visualization of Optimization Process:
 
-Optuna provides useful visualizations to track the optimization process:
+Optuna provides several visualization tools:
+- **Optimization History**
+- **Hyperparameter Importance**
 
-#### 1. Optimization History
-This plot shows how the RMSE changed during the optimization process:
 ```python
 vis.plot_optimization_history(study)
-```
-
-#### 2. Hyperparameter Importance
-This plot shows which hyperparameters had the most influence on the model's performance:
-```python
 vis.plot_param_importances(study)
 ```
 
@@ -164,22 +167,29 @@ Ensure that the following libraries are installed:
 - `matplotlib`
 - `seaborn`
 
-You can install them with the following command:
+You can install them using:
+
 ```bash
 pip install pandas numpy scikit-learn xgboost matplotlib seaborn optuna
 ```
 
----
-
-## Installation
+### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/NasdormML/Time_Series.git
 cd Time_Series
 ```
 
-2. Install the required dependencies:
+2. Install the dependencies:
+
 ```bash
 pip install -r requirements.txt
 ```
+
+---
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
