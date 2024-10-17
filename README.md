@@ -82,7 +82,7 @@ Comprehensive **exploratory data analysis (EDA)** and preprocessing steps are in
    train['log_sales'] = np.log1p(train['sales'])
    ```
 
-4. **Data Processing**: One-hot encoding, missing value imputation, and feature scaling using **scikit-learn** pipelines.
+4. **Data Processing**: Target encoding, missing value imputation, and feature scaling using **scikit-learn** pipelines.
 
    ```python
    target_encoder = ce.TargetEncoder(cols=categorical_features)
