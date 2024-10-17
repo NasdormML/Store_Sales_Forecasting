@@ -3,5 +3,6 @@ optuna==3.6.1
 pandas==2.2.2
 scikit-learn==1.5.1
 scipy==1.13.1
+matplolib==3.9.2
 seaborn==0.13.2
 xgboost==2.1.0
