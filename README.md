@@ -188,6 +188,18 @@ cd Time_Series
 pip install -r requirements.txt
 ```
 
+3. Build Docker image:
+   ```bash
+   docker build -t time_series_image .
+   ```
+
+4. Launch the port spread container for Jupyter:
+   ```bash
+   docker run -it --name TS_container -p 8888:8888 time_series_image
+   ```
+
+5. Open Jupyter Notebook in browser:
+   - Перейдите по адресу: `http://localhost:8888`
 ---
 
 ## License
