@@ -199,7 +199,7 @@ pip install -r requirements.txt
    ```
 
 5. Open Jupyter Notebook in browser:
-   - Перейдите по адресу: `http://localhost:8888`
+   - Run this: `http://localhost:8888`
 ---
 
 ## License
