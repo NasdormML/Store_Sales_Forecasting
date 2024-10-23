@@ -34,7 +34,9 @@ Comprehensive **exploratory data analysis (EDA)** and preprocessing steps are in
 
 ```bash
 ├── store-sales-time-series-forecasting/    # Datasets used in the project
-├── notebooks/store_sales_kaggle.ipynb      # Jupyter notebooks with EDA and modeling
+├── notebooks/
+│     ├── EDA.ipynb                          # Jupyter notebooks with EDA
+│     └── store_sales_kaggle.ipynb           # Jupyter notebooks with modeling
 ├── README.md                               # Project overview and setup
 └── requirements.txt                        # Dependencies and libraries
 ```
