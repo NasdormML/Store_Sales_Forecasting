@@ -175,34 +175,37 @@ You can install them using:
 pip install pandas numpy scikit-learn xgboost matplotlib seaborn optuna
 ```
 
+
 ### Installation
 
-1. Clone the repository:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/NasdormML/Time_Series.git
+   cd Time_Series
+   ```
 
-```bash
-git clone https://github.com/NasdormML/Time_Series.git
-cd Time_Series
-```
+2. **Install dependencies (optional for local usage):**
+   If you want to run the project locally without Docker:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-2. Install the dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-3. Build Docker image:
+3. **Build the Docker image:**
    ```bash
    docker build -t time_series_image .
    ```
 
-4. Launch the port spread container for Jupyter:
+4. **Run the Docker container with port forwarding for Jupyter:**
    ```bash
    docker run -it --name TS_container -p 8888:8888 time_series_image
    ```
 
-5. Open Jupyter Notebook in browser:
-   - Run this: `http://localhost:8888`
+5. **Access Jupyter Notebook in your browser:**
+   - Open the following URL: [http://localhost:8888](http://localhost:8888)
+   - If prompted, use the token provided in the terminal output.
+
 ---
+
 
 ## License
 
