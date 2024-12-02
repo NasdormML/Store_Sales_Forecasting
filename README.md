@@ -63,12 +63,44 @@ This project aims to forecast retail store sales based on historical data, helpi
 
 ## Project Structure
 ```
-store-sales-time-series-forecasting/    # Datasets used in the project
-notebooks/
-│   ├── EDA.ipynb                      # Jupyter notebook for EDA
-│   └── store_sales_kaggle.ipynb       # Jupyter notebook for modeling
-README.md                               # Project overview and setup
-requirements.txt                        # Dependencies and libraries
+time_series_project/
+├── .github/
+│   └── workflows/
+│       └── ci.yml               # CI/CD configuration file
+├── .pytest_cache/               # Pytest cache files
+├── data/
+│   ├── processed/               # Preprocessed data ready for modeling
+│   │   ├── train.csv
+│   │   └── test.csv
+│   ├── raw/                     # Raw input data
+│   │   ├── holidays.csv
+│   │   ├── oil.csv
+│   │   ├── sample_submission.csv
+│   │   ├── stores.csv
+│   │   ├── test.csv
+│   │   ├── train.csv
+│   │   └── transactions.csv
+├── models/                      # Saved trained models
+├── notebooks/                   # Jupyter notebooks for exploratory analysis
+│   ├── EDA.ipynb                # Exploratory Data Analysis
+│   └── store_sales_kaggle.ipynb # Additional exploratory analysis
+├── src/                         # Source code of the project
+│   ├── __init__.py
+│   ├── data_preparation.py      # Code for data preprocessing
+│   ├── model_prediction.py      # Code for generating predictions
+│   └── model_training.py        # Code for training the model
+├── tests/                       # Unit and integration tests
+│   ├── __init__.py
+│   ├── test_data_preparation.py # Tests for data_preparation.py
+│   ├── test_model_prediction.py # Tests for model_prediction.py
+│   └── test_model_training.py   # Tests for model_training.py
+├── .gitignore                   # Files and folders to ignore in Git
+├── dockerfile                   # Dockerfile for containerizing the project
+├── LICENSE                      # License for the project
+├── main.py                      # Entry point for running the project
+├── README.md                    # Project description and documentation
+└── requirements.txt             # Python dependencies
+
 ```
 
 ## Business Value
