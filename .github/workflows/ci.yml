@@ -34,13 +34,15 @@ jobs:
       run: pytest tests/
 
     - name: Build Docker image
-      run: docker build -t my_ml_project .
+      run: docker build -t time_series_forecast
+       .
 
     - name: Push Docker image (optional)
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       run: |
-        echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
+        echo $DOCKER_TOKEN | docker login --username $DOCKER_USERNAME --password-stdin
         docker tag my_ml_project $DOCKER_USERNAME/my_ml_project:latest
         docker push $DOCKER_USERNAME/my_ml_project:latest
+
