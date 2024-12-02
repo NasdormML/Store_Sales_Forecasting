@@ -5,6 +5,7 @@
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-v1.5.1-yellow)
 ![XGBoost](https://img.shields.io/badge/XGBoost-v2.1.0-red)
 ![Optuna](https://img.shields.io/badge/Optuna-v3.0.0-orange)
+[![CI/CD](https://github.com/NasdormML/Store_Sales_Forecasting/actions/workflows/ci.yml/badge.svg)](https://github.com/NasdormML/Store_Sales_Forecasting/actions/workflows/ci.yml)
 
 ---
 
