@@ -8,3 +8,4 @@ matplotlib-inline==0.1.6
 seaborn==0.13.2
 xgboost==2.1.0
 pytest>=7.0.0
+category_encoders>=2.6
