@@ -5,12 +5,12 @@ from src.data_preparation import load_and_prepare_data
 @pytest.fixture
 def raw_data_paths():
     return {
-        "train_path": "../data/raw/train.csv",
-        "test_path": "../data/raw/test.csv",
-        "stores_path": "../data/raw/stores.csv",
-        "transactions_path": "../data/raw/transactions.csv",
-        "oil_path": "../data/raw/oil.csv",
-        "holidays_path": "../data/raw/holidays.csv"
+        "train_path": "/data/raw/train.csv",
+        "test_path": "/data/raw/test.csv",
+        "stores_path": "/data/raw/stores.csv",
+        "transactions_path": "/data/raw/transactions.csv",
+        "oil_path": "/data/raw/oil.csv",
+        "holidays_path": "/data/raw/holidays.csv"
     }
 
 def test_load_and_prepare_data(raw_data_paths):
