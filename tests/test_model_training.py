@@ -1,6 +1,8 @@
 import pytest
 import pandas as pd
 from src.model_training import train_model
+import os
+assert os.path.exists("models/trained_model.pkl"), "Trained model was not saved"
 
 @pytest.fixture
 def processed_train_data():

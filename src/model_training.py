@@ -3,6 +3,9 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
+import category_encoders as ce
+import os
+
 import joblib
 
 def train_model(train, categorical_features, numerical_features):
