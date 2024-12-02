@@ -95,3 +95,6 @@ def preprocess_data():
     train.to_csv(f"{PROCESSED_DATA_DIR}/train.csv", index=False)
     test.to_csv(f"{PROCESSED_DATA_DIR}/test.csv", index=False)
     print(f"Train and test datasets are processed and saved to {PROCESSED_DATA_DIR}.")
+
+if __name__ == "__main__":
+    preprocess_data()
