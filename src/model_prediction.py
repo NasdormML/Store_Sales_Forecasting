@@ -18,3 +18,6 @@ def predict(test_data_path):
     # Предсказания
     predictions = model.predict(dtest)
     return predictions
+
+if __name__ == "__main__":
+    predict()

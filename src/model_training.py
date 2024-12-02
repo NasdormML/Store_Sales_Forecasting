@@ -39,3 +39,6 @@ def train_model(train, categorical_features, numerical_features):
     # Сохранение
     joblib.dump((model, target_encoder, preprocessor), "models/trained_model.pkl")
     return model
+    
+if __name__ == "__main__":
+    train_model()
