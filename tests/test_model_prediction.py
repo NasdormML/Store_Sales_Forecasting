@@ -4,7 +4,7 @@ from src.model_prediction import predict
 
 @pytest.fixture
 def test_data_path():
-    return "/data/processed/test.csv"
+    return "data/processed/test.csv"
 
 def test_predict(test_data_path):
     predictions = predict(test_data_path)
