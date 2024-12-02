@@ -1,4 +1,5 @@
 import xgboost as xgb
+import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
@@ -39,6 +40,10 @@ def train_model(train, categorical_features, numerical_features):
     # Сохранение
     joblib.dump((model, target_encoder, preprocessor), "models/trained_model.pkl")
     return model
-    
+
 if __name__ == "__main__":
-    train_model()
+
+    train_data = pd.read_csv("data/processed/train.csv")
+    categorical_features = ['holiday_type', 'locale', 'locale_name', 'store_nbr', 'family', 'city', 'state', 'cluster']
+    numerical_features = ['onpromotion', 'transactions', 'oil_price', 'lag_7_sales', 'lag_14_sales', 'rolling_mean_7', 'rolling_mean_14']
+    train_model(train_data, categorical_features, numerical_features)
