@@ -1,12 +1,10 @@
 import xgboost as xgb
-import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 import category_encoders as ce
 import os
-
 import joblib
 
 def train_model(train, categorical_features, numerical_features):
@@ -37,13 +35,19 @@ def train_model(train, categorical_features, numerical_features):
     }
     model = xgb.train(params, dtrain)
 
-    # Сохранение
-    joblib.dump((model, target_encoder, preprocessor), "models/trained_model.pkl")
+    # Создание папки models, если её нет
+    if not os.path.exists('models'):
+        os.makedirs('models')
+
+    # Сохранение модели
+    model_path = os.path.join(os.getcwd(), "models", "trained_model.pkl")
+    joblib.dump((model, target_encoder, preprocessor), model_path)
     return model
 
 if __name__ == "__main__":
-
+    import pandas as pd
     train_data = pd.read_csv("data/processed/train.csv")
     categorical_features = ['holiday_type', 'locale', 'locale_name', 'store_nbr', 'family', 'city', 'state', 'cluster']
     numerical_features = ['onpromotion', 'transactions', 'oil_price', 'lag_7_sales', 'lag_14_sales', 'rolling_mean_7', 'rolling_mean_14']
+    
     train_model(train_data, categorical_features, numerical_features)
