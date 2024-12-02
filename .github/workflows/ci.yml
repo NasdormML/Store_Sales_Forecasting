@@ -43,6 +43,6 @@ jobs:
         DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
       run: |
         echo $DOCKER_TOKEN | docker login --username $DOCKER_USERNAME --password-stdin
-        docker tag my_ml_project $DOCKER_USERNAME/my_ml_project:latest
-        docker push $DOCKER_USERNAME/my_ml_project:latest
+        docker tag time_series_forecast $DOCKER_USERNAME/time_series_forecast:latest
+        docker push $DOCKER_USERNAME/time_series_forecast:latest
 
