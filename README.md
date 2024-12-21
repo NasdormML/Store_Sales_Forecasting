@@ -1,10 +1,10 @@
 # Store Sales - Time Series Forecasting  
 
-![Python](https://img.shields.io/badge/Python-3.11-brightgreen)  
-![Seaborn](https://img.shields.io/badge/Seaborn-v0.13.2-blue)  
-![scikit-learn](https://img.shields.io/badge/scikit--learn-v1.5.1-yellow)  
-![XGBoost](https://img.shields.io/badge/XGBoost-v2.1.0-red)  
-![Optuna](https://img.shields.io/badge/Optuna-v3.0.0-orange)  
+![Python](https://img.shields.io/badge/Python-3.11-brightgreen)
+![Seaborn](https://img.shields.io/badge/Seaborn-v0.13.2-blue)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-v1.5.1-yellow)
+![XGBoost](https://img.shields.io/badge/XGBoost-v2.1.0-red)
+![Optuna](https://img.shields.io/badge/Optuna-v3.0.0-orange)
 
 ---
 
