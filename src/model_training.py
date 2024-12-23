@@ -41,7 +41,6 @@ def train_model(train, categorical_features, numerical_features):
     model = xgb.train(
         params,
         dtrain,
-        num_boost_round=params.get('n_estimators', 500),
         evals=[(dval, 'validation')],
         early_stopping_rounds=15
     )
