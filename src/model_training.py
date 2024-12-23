@@ -10,7 +10,10 @@ from sklearn.model_selection import train_test_split
 import json
 
 def train_model(train, categorical_features, numerical_features):
-    with open("hyperparameters.json", "r") as f:
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Текущая директория
+    HYPERPARAMS_PATH = os.path.join(BASE_DIR, "hyperparameters.json")
+
+    with open(HYPERPARAMS_PATH, "r") as f:
         params = json.load(f)
 
     X = train.drop(columns=['sales', 'log_sales'])
@@ -43,17 +46,21 @@ def train_model(train, categorical_features, numerical_features):
         early_stopping_rounds=15
     )
 
-    if not os.path.exists('models'):
-        os.makedirs('models')
+    models_dir = os.path.join(BASE_DIR, "models")
+    if not os.path.exists(models_dir):
+        os.makedirs(models_dir)
 
-    model_path = os.path.join(os.getcwd(), "models", "trained_model.pkl")
+    model_path = os.path.join(models_dir, "trained_model.pkl")
     joblib.dump((model, target_encoder, preprocessor), model_path)
     return model
 
 if __name__ == "__main__":
     import pandas as pd
 
-    train_data = pd.read_csv("data/processed/train.csv")
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    train_data_path = os.path.join(BASE_DIR, "data", "processed", "train.csv")
+
+    train_data = pd.read_csv(train_data_path)
     categorical_features = ['holiday_type', 'locale', 'locale_name', 'store_nbr', 'family', 'city', 'state', 'cluster']
     numerical_features = ['onpromotion', 'transactions', 'oil_price', 'lag_7_sales', 'lag_14_sales', 'rolling_mean_7', 'rolling_mean_14']
 
