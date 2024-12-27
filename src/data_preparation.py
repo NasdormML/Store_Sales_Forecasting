@@ -32,10 +32,8 @@ def load_and_prepare_data():
     Основной процесс обработки данных. 
     Возвращает два DataFrame: train и test.
     """
-    # Загрузка данных
     train_df, test_df, stores_df, transactions_df, oil_df, holidays_df = load_data()
 
-    # Объединение данных
     train = train_df.merge(stores_df, on="store_nbr", how="left")
     train = train.merge(transactions_df, on=["date", "store_nbr"], how="left")
     train = train.merge(oil_df, on="date", how="left")
@@ -46,35 +44,28 @@ def load_and_prepare_data():
     test = test.merge(oil_df, on="date", how="left")
     test = test.merge(holidays_df, on="date", how="left")
 
-    # Заполнение пропусков
     for df in [train, test]:
         df["oil_price"] = df["dcoilwtico"].ffill().bfill()
         df["holiday_type"] = df["type_y"].fillna("No Holiday")
         df["transactions"] = df["transactions"].ffill()
         df.drop(columns=["type_y"], inplace=True)
 
-    # Преобразование типов
     for df in [train, test]:
         df["store_nbr"] = df["store_nbr"].astype(str)
         df["cluster"] = df["cluster"].astype(str)
 
-    # Создание временных признаков
     train = create_date_features(train)
     test = create_date_features(test)
 
-    # Лаговые признаки и скользящие средние для train
     train["lag_7_sales"] = train["sales"].shift(7)
     train["lag_14_sales"] = train["sales"].shift(14)
     train["rolling_mean_7"] = train["sales"].shift(1).rolling(window=7).mean()
     train["rolling_mean_14"] = train["sales"].shift(1).rolling(window=14).mean()
 
-    # Удаление строк с пропущенными значениями
     train = train.dropna(subset=["lag_7_sales", "lag_14_sales", "rolling_mean_7", "rolling_mean_14"])
 
-    # Лог-трансформация целевой переменной
     train["log_sales"] = np.log1p(train["sales"])
 
-    # Лаговые признаки и скользящие средние для test
     last_lag_7_sales = train["lag_7_sales"].iloc[-1]
     last_lag_14_sales = train["lag_14_sales"].iloc[-1]
     last_rolling_mean_7 = train["rolling_mean_7"].iloc[-1]

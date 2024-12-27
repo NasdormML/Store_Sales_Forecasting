@@ -6,15 +6,24 @@ from sklearn.preprocessing import StandardScaler
 import category_encoders as ce
 import os
 import joblib
+from sklearn.model_selection import train_test_split
+import json
 
 def train_model(train, categorical_features, numerical_features):
-    # Разделение данных
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Текущая директория
+    HYPERPARAMS_PATH = os.path.join(BASE_DIR, "hyperparameters.json")
+
+    with open(HYPERPARAMS_PATH, "r") as f:
+        params = json.load(f)
+
     X = train.drop(columns=['sales', 'log_sales'])
     y = train['log_sales']
 
-    # Подготовка данных
+    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+
     target_encoder = ce.TargetEncoder(cols=categorical_features)
-    X_encoded = target_encoder.fit_transform(X, y)
+    X_train_encoded = target_encoder.fit_transform(X_train, y_train)
+    X_val_encoded = target_encoder.transform(X_val)
 
     preprocessor = ColumnTransformer(
         transformers=[
@@ -23,31 +32,35 @@ def train_model(train, categorical_features, numerical_features):
         ]
     )
 
-    X_processed = preprocessor.fit_transform(X_encoded)
+    X_train_processed = preprocessor.fit_transform(X_train_encoded)
+    X_val_processed = preprocessor.transform(X_val_encoded)
 
-    # Обучение модели
-    dtrain = xgb.DMatrix(X_processed, label=y)
-    params = {
-        'objective': 'reg:squarederror',
-        'max_depth': 7,
-        'learning_rate': 0.1,
-        'n_estimators': 500
-    }
-    model = xgb.train(params, dtrain)
+    dtrain = xgb.DMatrix(X_train_processed, label=y_train)
+    dval = xgb.DMatrix(X_val_processed, label=y_val)
 
-    # Создание папки models, если её нет
-    if not os.path.exists('models'):
-        os.makedirs('models')
+    model = xgb.train(
+        params,
+        dtrain,
+        evals=[(dval, 'validation')],
+        early_stopping_rounds=15
+    )
 
-    # Сохранение модели
-    model_path = os.path.join(os.getcwd(), "models", "trained_model.pkl")
+    models_dir = os.path.join(BASE_DIR, "models")
+    if not os.path.exists(models_dir):
+        os.makedirs(models_dir)
+
+    model_path = os.path.join(models_dir, "trained_model.pkl")
     joblib.dump((model, target_encoder, preprocessor), model_path)
     return model
 
 if __name__ == "__main__":
     import pandas as pd
-    train_data = pd.read_csv("data/processed/train.csv")
+
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    train_data_path = os.path.join(BASE_DIR, "data", "processed", "train.csv")
+
+    train_data = pd.read_csv(train_data_path)
     categorical_features = ['holiday_type', 'locale', 'locale_name', 'store_nbr', 'family', 'city', 'state', 'cluster']
     numerical_features = ['onpromotion', 'transactions', 'oil_price', 'lag_7_sales', 'lag_14_sales', 'rolling_mean_7', 'rolling_mean_14']
-    
+
     train_model(train_data, categorical_features, numerical_features)
