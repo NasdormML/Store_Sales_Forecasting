@@ -1,9 +1,9 @@
-import xgboost as xgb
 import category_encoders as ce
 import os
 import joblib
 import json
 import pandas as pd
+from xgboost import XGBRegressor
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
@@ -38,16 +38,13 @@ def train_model(train, categorical_features, numerical_features):
     X_train_processed = preprocessor.fit_transform(X_train_encoded)
     X_val_processed = preprocessor.transform(X_val_encoded)
 
-    dtrain = xgb.DMatrix(X_train_processed, label=y_train)
-    dval = xgb.DMatrix(X_val_processed, label=y_val)
-
     # Обучение модели
-    model = xgb.train(
-        params,
-        dtrain,
-        num_boost_round=params.get("num_boost_round", 100),
-        evals=[(dval, 'validation')],
-        early_stopping_rounds=15
+    model = XGBRegressor(**params)
+    model.fit(
+        X_train_processed,
+        y_train,
+        eval_set=[(X_val_processed, y_val)],
+        early_stopping_rounds=params.get("early_stopping_rounds", 15)
     )
 
     # Сохранение модели
@@ -63,8 +60,6 @@ def train_model(train, categorical_features, numerical_features):
 
 if __name__ == "__main__":
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-    # Путь к обработанным данным
     train_data_path = os.path.join(BASE_DIR, "data", "processed", "train.csv")
 
     # Загрузка данных
