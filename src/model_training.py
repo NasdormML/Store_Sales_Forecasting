@@ -1,14 +1,14 @@
 import xgboost as xgb
+import category_encoders as ce
+import os
+import joblib
+import json
+import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
-import category_encoders as ce
-import os
-import joblib
 from sklearn.model_selection import train_test_split
-import json
-import pandas as pd
 
 def train_model(train, categorical_features, numerical_features):
     # Правильный BASE_DIR для работы с models
@@ -63,7 +63,7 @@ def train_model(train, categorical_features, numerical_features):
 
 if __name__ == "__main__":
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    
+
     # Путь к обработанным данным
     train_data_path = os.path.join(BASE_DIR, "data", "processed", "train.csv")
 
