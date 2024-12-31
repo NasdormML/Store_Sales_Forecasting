@@ -8,14 +8,17 @@ import os
 import joblib
 from sklearn.model_selection import train_test_split
 import json
+import pandas as pd
 
 def train_model(train, categorical_features, numerical_features):
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Текущая директория
-    HYPERPARAMS_PATH = os.path.join(BASE_DIR, "hyperparameters.json")
+    # Правильный BASE_DIR для работы с models
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    HYPERPARAMS_PATH = os.path.join(BASE_DIR, "src", "hyperparameters.json")
 
     with open(HYPERPARAMS_PATH, "r") as f:
         params = json.load(f)
 
+    # Обработка данных
     X = train.drop(columns=['sales', 'log_sales'])
     y = train['log_sales']
 
@@ -38,24 +41,27 @@ def train_model(train, categorical_features, numerical_features):
     dtrain = xgb.DMatrix(X_train_processed, label=y_train)
     dval = xgb.DMatrix(X_val_processed, label=y_val)
 
+    # Обучение модели
     model = xgb.train(
         params,
         dtrain,
+        num_boost_round=params.get("num_boost_round", 100),
         evals=[(dval, 'validation')],
         early_stopping_rounds=15
     )
 
+    # Сохранение модели
     models_dir = os.path.join(BASE_DIR, "models")
-    if not os.path.exists(models_dir):
-        os.makedirs(models_dir)
+    os.makedirs(models_dir, exist_ok=True)
 
     model_path = os.path.join(models_dir, "trained_model.pkl")
     joblib.dump((model, target_encoder, preprocessor), model_path)
+
+    assert os.path.exists(model_path), "Model file was not saved successfully."
     return model
 
-if __name__ == "__main__":
-    import pandas as pd
 
+if __name__ == "__main__":
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     train_data_path = os.path.join(BASE_DIR, "data", "processed", "train.csv")
 
