@@ -62,11 +62,16 @@ def train_model(train, categorical_features, numerical_features):
 
 
 if __name__ == "__main__":
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    
+    # Путь к обработанным данным
     train_data_path = os.path.join(BASE_DIR, "data", "processed", "train.csv")
 
+    # Загрузка данных
     train_data = pd.read_csv(train_data_path)
+
     categorical_features = ['holiday_type', 'locale', 'locale_name', 'store_nbr', 'family', 'city', 'state', 'cluster']
     numerical_features = ['onpromotion', 'transactions', 'oil_price', 'lag_7_sales', 'lag_14_sales', 'rolling_mean_7', 'rolling_mean_14']
 
+    # Обучение модели
     train_model(train_data, categorical_features, numerical_features)
